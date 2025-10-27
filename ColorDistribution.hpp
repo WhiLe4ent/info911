@@ -41,8 +41,16 @@ int closestObjectIndex(const ColorDistribution& h,
 cv::Mat recoObjectMulti(const cv::Mat &input,
                         const std::vector<std::vector<ColorDistribution>> &all_col_hists,
                         const std::vector<cv::Vec3b> &colors,
-                        int bloc);
+                        int bloc,
+                        std::vector<std::vector<int>> &outLabels,
+                        bool doRelax = true,
+                        int superFactor = 4);
 
 void addDistributionIfFar(std::vector<ColorDistribution> &hists,
                           const ColorDistribution &newHist,
                           float threshold);
+
+void relaxLabels(std::vector<std::vector<int>>& labels, int nbRows, int nbCols, int passes = 1);
+
+Mat computeMarkers(const std::vector<std::vector<int>> &labels, int bloc, int superFactor);
+
