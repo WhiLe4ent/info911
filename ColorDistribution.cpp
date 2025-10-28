@@ -302,7 +302,7 @@ cv::Mat computeMarkers(const std::vector<std::vector<int>> &labels, int bloc, in
     const int rows = labels.size();
     const int cols = labels[0].size();
 
-    cv::Mat markers = cv::Mat::zeros(rows * bloc, cols * bloc, CV_8U);
+    cv::Mat markers = cv::Mat::zeros(rows * bloc, cols * bloc, CV_32S);
 
     for (int sy = 0; sy < rows; sy += superFactor)
     {

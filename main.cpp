@@ -189,16 +189,14 @@ int main(int argc, char **argv)
 
       Mat img_for_ws;
       img_input.copyTo(img_for_ws);
-      cv::Mat markers_ws;
-      markers.clone().convertTo(markers_ws, CV_32S);
-      cv::watershed(img_for_ws, markers_ws);
+      cv::watershed(img_for_ws, markers);
 
       Mat final = Mat::zeros(img_input.size(), CV_8UC3);
-      for (int y = 0; y < markers_ws.rows; ++y)
+      for (int y = 0; y < markers.rows; ++y)
       {
-        for (int x = 0; x < markers_ws.cols; ++x)
+        for (int x = 0; x < markers.cols; ++x)
         {
-          int idx = markers_ws.at<int>(y, x);
+          int idx = markers.at<int>(y, x);
           if (idx > 0 && idx < (int)colors.size())
             final.at<Vec3b>(y, x) = colors[idx];
         }
