@@ -30,7 +30,7 @@ int main(int argc, char **argv)
   const int height = 480;
   const int size = 50;
   const int bbloc = 128;
-  float DIST_THRESHOLD = 0.05f;
+  float DIST_THRESHOLD = 0.005f;
   int small_bloc = 8;
   bool useRelaxDefault = true;
   int superFactorDefault = 2;
@@ -89,8 +89,12 @@ int main(int argc, char **argv)
   {
     char c = (char)waitKey(50); // attend 50ms -> 20 images/s
 
-    if (img_input.empty())
-      continue;
+    if (!freeze)
+    {
+      pCap >> img_input;
+      if (img_input.empty())
+        continue;
+    }
 
     if (c == 27 || c == 'q')
       break;
@@ -213,7 +217,7 @@ int main(int argc, char **argv)
     lines.push_back("b:fond  n:newObj  a:addSample  r:reco  g:relax  +/-:thresh  s/S:superFactor");
     lines.push_back(string("Recon:") + (reco ? "ON " : "OFF ") +
                     "  Lissage:" + (show_relaxed ? "ON " : "OFF ") +
-                    "  Thresh:" + to_string((int)(DIST_THRESHOLD * 1000) / 1000.0));
+                    "  Thresh:" + to_string(DIST_THRESHOLD));
     lines.push_back(string("NbObjs:") + to_string((int)all_col_hists.size() - 1) +
                     "  Current:" + to_string(current_object));
     putOverlay(output, lines);

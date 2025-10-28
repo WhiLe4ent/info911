@@ -338,9 +338,31 @@ cv::Mat computeMarkers(const std::vector<std::vector<int>> &labels, int bloc, in
         }
     }
 
-    // petite dilatation pour agrandir les marqueurs
+    // dilate chaque label pour etre plus precis (meme si un peu plus lent)
     cv::Mat kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5));
-    cv::dilate(markers, markers, kernel);
+    cv::Mat result = cv::Mat::zeros(markers.size(), CV_32S);
+    cv::Mat assigned = cv::Mat::zeros(markers.size(), CV_8U);
 
-    return markers;
+    std::set<int> unique_labels;
+    for (int y = 0; y < markers.rows; ++y)
+        for (int x = 0; x < markers.cols; ++x)
+            if (markers.at<int>(y, x) != 0)
+                unique_labels.insert(markers.at<int>(y, x));
+
+    for (int label : unique_labels)
+    {
+        cv::Mat mask = (markers == label);
+        mask.convertTo(mask, CV_8U);
+        cv::Mat dilated;
+        cv::dilate(mask, dilated, kernel);
+
+        cv::Mat valid_zone = dilated & ~assigned;
+        result.setTo(label, valid_zone);
+        assigned |= valid_zone;
+    }
+
+    return result;
 }
+
+
+
