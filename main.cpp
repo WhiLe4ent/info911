@@ -201,8 +201,14 @@ int main(int argc, char **argv)
         for (int x = 0; x < markers.cols; ++x)
         {
           int idx = markers.at<int>(y, x);
-          if (idx > 0 && idx < (int)colors.size())
-            final.at<Vec3b>(y, x) = colors[idx];
+
+          // shift de 1 comme 0 est undefined dans watershed !!
+          if (idx > 0)
+          {
+            int original_idx = idx - 1;
+            if (original_idx >= 0 && original_idx < (int)colors.size())
+              final.at<Vec3b>(y, x) = colors[original_idx];
+          }
         }
       }
 

@@ -330,10 +330,8 @@ cv::Mat computeMarkers(const std::vector<std::vector<int>> &labels, int bloc, in
             {
                 int cx = (sx + superFactor / 2) * bloc;
                 int cy = (sy + superFactor / 2) * bloc;
-                if (bestLabel > 0)
-                    markers.at<int>(cy, cx) = bestLabel;
-                else if (bestLabel == 0 && counts.size() == 1)
-                    markers.at<int>(cy, cx) = 0;
+                
+                markers.at<int>(cy, cx) = bestLabel + 1;
             }
         }
     }
@@ -363,6 +361,5 @@ cv::Mat computeMarkers(const std::vector<std::vector<int>> &labels, int bloc, in
 
     return result;
 }
-
 
 
